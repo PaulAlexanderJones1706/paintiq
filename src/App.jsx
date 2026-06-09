@@ -141,9 +141,27 @@ footer{background:var(--txt);color:rgba(255,255,255,.7);padding:56px 24px 28px;}
 
 @media(max-width:768px){
   .nav-wide{display:none!important;}
-  .hero{padding:72px 16px 60px;}
-  .sec{padding:56px 16px;}
+  .nav-hamburger{display:flex!important;}
+  .hero{padding:72px 16px 56px;}
+  .sec{padding:52px 16px;}
+  .mob-col,.mob-col-s{grid-template-columns:1fr!important;gap:28px!important;}
+  .g4{grid-template-columns:repeat(2,1fr)!important;}
+  .step-num{font-size:48px;}
+  .pkg-card{flex-direction:column;}
 }
+@media(max-width:480px){
+  .g4{grid-template-columns:1fr!important;}
+  .g3{grid-template-columns:1fr!important;}
+}
+.mob-col{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center;}
+.mob-col-s{display:grid;grid-template-columns:1fr 1fr;gap:32px;align-items:start;}
+.nav-hamburger{display:none;background:none;border:none;cursor:pointer;flex-direction:column;gap:5px;padding:8px;align-items:center;justify-content:center;}
+.nav-hamburger span{width:22px;height:2px;background:#fff;display:block;border-radius:2px;transition:all .2s;}
+.mob-nav{position:absolute;top:60px;left:0;right:0;background:var(--txt);border-top:1px solid rgba(255,255,255,.1);padding:16px 20px;flex-direction:column;gap:2px;z-index:99;display:none;}
+.mob-nav.open{display:flex;}
+.mob-nav .nl{text-align:left;padding:10px 12px;font-size:14px;border-radius:4px;}
+.mob-nav .nl:hover{background:rgba(255,255,255,.05);}
+.mob-cta{margin-top:8px;}
 `;
 
 // ─── TOGGLE ───────────────────────────────────────────────────────────────────
@@ -158,17 +176,30 @@ function Toggle({checked,onChange,label}){
 
 // ─── NAVBAR ───────────────────────────────────────────────────────────────────
 function Navbar({page,nav}){
+  const [open,setOpen]=useState(false);
   const links=[["home","Home"],["tool","Quote Tool"],["packages","Packages"],["growth","Website"],["leads","Lead Gen"],["voice","Voice"],["contact","Demo"]];
+  const go=p=>{nav(p);setOpen(false);};
   return(
-    <nav className="nav">
+    <nav className="nav" style={{position:"sticky"}}>
       <div className="nav-in">
-        <button className="logo" onClick={()=>nav("home")}>Paint<span className="logo-iq">IQ</span></button>
+        <button className="logo" onClick={()=>go("home")}>Paint<span className="logo-iq">IQ</span></button>
         <div className="nav-wide" style={{display:"flex",gap:2,alignItems:"center"}}>
           {links.map(([p,l])=>(
-            <button key={p} className={`nl ${page===p?"on":""}`} onClick={()=>nav(p)}>{l}</button>
+            <button key={p} className={`nl ${page===p?"on":""}`} onClick={()=>go(p)}>{l}</button>
           ))}
-          <button className="bp" style={{padding:"8px 18px",marginLeft:12,fontSize:12}} onClick={()=>nav("contact")}>Book Demo</button>
+          <button className="bp" style={{padding:"8px 18px",marginLeft:12,fontSize:12}} onClick={()=>go("contact")}>Book Demo</button>
         </div>
+        <button className="nav-hamburger" onClick={()=>setOpen(o=>!o)} aria-label="Menu">
+          <span style={{transform:open?"rotate(45deg) translate(5px,5px)":"none"}}/>
+          <span style={{opacity:open?0:1}}/>
+          <span style={{transform:open?"rotate(-45deg) translate(5px,-5px)":"none"}}/>
+        </button>
+      </div>
+      <div className={`mob-nav ${open?"open":""}`}>
+        {links.map(([p,l])=>(
+          <button key={p} className={`nl ${page===p?"on":""}`} onClick={()=>go(p)}>{l}</button>
+        ))}
+        <button className="bp mob-cta" style={{fontSize:13,padding:"11px 0",width:"100%",marginTop:4}} onClick={()=>go("contact")}>Book Demo</button>
       </div>
     </nav>
   );
@@ -769,7 +800,7 @@ function RevenueEstimator({nav}){
           <p style={{color:"rgba(255,255,255,.55)",fontSize:15,maxWidth:480,margin:"0 auto"}}>Adjust your current revenue and toggle products to see your estimated growth.</p>
         </div>
 
-        <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:32,alignItems:"start"}}>
+        <div className="mob-col-s">
 
           {/* LEFT — inputs */}
           <div>
@@ -807,7 +838,7 @@ function RevenueEstimator({nav}){
           {/* RIGHT — output */}
           <div style={{position:"sticky",top:80}}>
             <div style={{background:"rgba(255,255,255,.04)",border:"1px solid rgba(255,255,255,.08)",borderRadius:6,padding:28,marginBottom:16}}>
-              <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:16,marginBottom:24}}>
+              <div className="mob-col-s" style={{marginBottom:24}}>
                 <div style={{background:"rgba(255,255,255,.04)",borderRadius:4,padding:"16px 20px"}}>
                   <div style={{fontFamily:"var(--fh)",fontSize:11,letterSpacing:".08em",textTransform:"uppercase",color:"rgba(255,255,255,.35)",marginBottom:6}}>Without PaintIQ</div>
                   <div style={{fontFamily:"var(--fh)",fontSize:"clamp(22px,3vw,32px)",fontWeight:800,color:"rgba(255,255,255,.45)",lineHeight:1}}>{fmt2(revenue)}</div>
@@ -869,7 +900,7 @@ function HomePage({nav}){
       {/* HERO */}
       <div className="hero">
         <div style={{maxWidth:1200,margin:"0 auto",position:"relative"}}>
-          <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:48,alignItems:"center"}}>
+          <div className="mob-col">
             <div>
               <div style={{display:"inline-flex",alignItems:"center",gap:8,background:"rgba(232,66,10,.15)",border:"1px solid rgba(232,66,10,.3)",borderRadius:2,padding:"5px 12px",marginBottom:20}}>
                 <span style={{width:6,height:6,borderRadius:"50%",background:"var(--acc)",display:"inline-block"}}/>
@@ -1146,7 +1177,7 @@ function QuoteToolPage({rates,onRates}){
       <div style={{background:"var(--txt)",padding:"64px 24px 52px"}}>
         <div style={{maxWidth:1100,margin:"0 auto"}}>
           <div className="tag">PaintIQ Quote Tool</div>
-          <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:48,alignItems:"center"}}>
+          <div className="mob-col">
             <div>
               <h1 style={{fontFamily:"var(--fh)",fontSize:"clamp(32px,5vw,58px)",fontWeight:800,color:"#fff",lineHeight:.95,marginBottom:20,letterSpacing:"-.01em"}}>
                 Give every homeowner an instant quote.<br/><span style={{color:"var(--acc)"}}>Capture every lead.</span>
@@ -1218,7 +1249,7 @@ function ContentPage({color,tagLabel,title,heroSteps,heroStats,whyLeft,whyRight,
       <div style={{background:"var(--txt)",padding:"64px 24px 52px"}}>
         <div style={{maxWidth:1100,margin:"0 auto"}}>
           <div className="tag" style={{background:"rgba(255,255,255,.06)",color:"#fff",borderColor:"rgba(255,255,255,.15)"}}>{tagLabel}</div>
-          <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:48,alignItems:"center"}}>
+          <div className="mob-col">
             <div>
               <h1 style={{fontFamily:"var(--fh)",fontSize:"clamp(30px,5vw,54px)",fontWeight:800,color:"#fff",lineHeight:.95,marginBottom:20,letterSpacing:"-.01em"}}>{title}</h1>
               {heroSteps&&(
