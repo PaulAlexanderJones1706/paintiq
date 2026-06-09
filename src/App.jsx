@@ -1017,4 +1017,56 @@ function ContactPage(){
         </div>
         <div className="g2">
           <div className="fg"><label className="fl">Location</label><input className="fi" type="text" placeholder="Sydney, NSW" value={f.location} onChange={e=>set("location",e.target.value)}/></div>
-          <div className="fg"><label className="fl">Current website (if any)</label><input className="fi" type="text" placeholder="www.smithpainting.com.au" value={f.website} onChange={e=>set("website
+          <div className="fg"><label className="fl">Current website (if any)</label><input className="fi" type="text" placeholder="www.smithpainting.com.au" value={f.website} onChange={e=>set("website onChange={e=>set("website",e.target.value)}/></div>
+        </div>
+        <div className="fg">
+          <label className="fl">Package interest</label>
+          <select className="fi" value={f.pkg} onChange={e=>set("pkg",e.target.value)}>
+            <option value="quote-tool">Quote Tool — $497 setup + $97/mo</option>
+            <option value="website">Website Growth — $1,997 + $197/mo</option>
+            <option value="leads">Lead Engine — $3,497 + $397/mo</option>
+            <option value="complete">Complete System — $5,997 + $597/mo</option>
+            <option value="unsure">Not sure yet — need advice first</option>
+          </select>
+        </div>
+        <div className="fg">
+          <label className="fl">Biggest challenge right now</label>
+          <textarea className="fi" rows={3} style={{resize:"vertical"}} placeholder="e.g. I spend too long writing quotes manually and miss calls when on site..." value={f.challenge} onChange={e=>set("challenge",e.target.value)}/>
+        </div>
+        <button className="bp" style={{width:"100%",fontSize:16,padding:"14px 0"}} onClick={()=>setSent(true)}>Book My Demo</button>
+        <p style={{color:"var(--mut)",fontSize:12,textAlign:"center",marginTop:12}}>No spam. No cold calls. You will only hear from us about your demo.</p>
+      </div>
+    </div>
+  );
+}
+
+export default function App(){
+  const [page,setPage]=useState("home");
+  const [rates,setRates]=useState({...DEFAULT_RATES});
+  const [showRates,setShowRates]=useState(false);
+
+  useEffect(()=>{
+    const link=document.createElement("link");link.rel="stylesheet";link.href=FONTS_URL;
+    document.head.appendChild(link);
+    const style=document.createElement("style");style.textContent=CSS;
+    document.head.appendChild(style);
+    return()=>{try{document.head.removeChild(link);document.head.removeChild(style);}catch(e){}};
+  },[]);
+
+  const nav=p=>{setPage(p);try{window.scrollTo(0,0);}catch(e){}};
+
+  return(
+    <div style={{fontFamily:"'Source Sans 3',sans-serif",background:"#F5F2EC",color:"#242020",minHeight:"100vh"}}>
+      {showRates&&<RateModal rates={rates} setRates={setRates} onClose={()=>setShowRates(false)}/>}
+      <Navbar page={page} nav={nav}/>
+      {page==="home"     &&<HomePage     nav={nav}/>}
+      {page==="tool"     &&<QuoteToolPage rates={rates} onRates={()=>setShowRates(true)}/>}
+      {page==="packages" &&<PackagesPage  nav={nav}/>}
+      {page==="growth"   &&<WebsiteGrowthPage nav={nav}/>}
+      {page==="leads"    &&<LeadGenPage   nav={nav}/>}
+      {page==="voice"    &&<AIVoicePage   nav={nav}/>}
+      {page==="contact"  &&<ContactPage/>}
+      <Footer nav={nav}/>
+    </div>
+  );
+}
