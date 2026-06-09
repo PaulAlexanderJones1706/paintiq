@@ -1017,7 +1017,7 @@ function ContactPage(){
         </div>
         <div className="g2">
           <div className="fg"><label className="fl">Location</label><input className="fi" type="text" placeholder="Sydney, NSW" value={f.location} onChange={e=>set("location",e.target.value)}/></div>
-          <div className="fg"><label className="fl">Current website (if any)</label><input className="fi" type="text" placeholder="www.smithpainting.com.au" value={f.website} onChange={e=>set("website onChange={e=>set("website",e.target.value)}/></div>
+          <div className="fg"><label className="fl">Current website (if any)</label><input className="fi" type="text" placeholder="www.smithpainting.com.au" value={f.website} onChange={e=>set("website",e.target.value)}/></div>
         </div>
         <div className="fg">
           <label className="fl">Package interest</label>
