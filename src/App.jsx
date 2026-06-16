@@ -166,16 +166,36 @@ function Toggle({checked,onChange,label}){
 
 function Navbar({page,nav}){
   const [open,setOpen]=useState(false);
-  const links=[["home","Home"],["system","The System"],["tool","Quote Tool"],["pricing","Pricing"]];
-  const go=p=>{nav(p);setOpen(false);};
+  const [subOpen,setSubOpen]=useState(false);
+  const MODULES=[
+    ["growth","PaintIQ Website","#0D6E56"],
+    ["tool","PaintIQ Quote Tool","#E8420A"],
+    ["voice","PaintIQ Voice","#0F2744"],
+    ["leads","PaintIQ Social + Leads","#D4860A"],
+  ];
+  const go=p=>{nav(p);setOpen(false);setSubOpen(false);};
   return(
     <nav className="nav">
       <div className="nav-in">
         <button className="logo" onClick={()=>go("home")}>Paint<span className="logo-iq">IQ</span></button>
         <div className="nav-wide" style={{display:"flex",gap:2,alignItems:"center"}}>
-          {links.map(([p,l])=>(
-            <button key={p} className={`nl ${page===p?"on":""}`} onClick={()=>go(p)}>{l}</button>
-          ))}
+          <button className={`nl ${page==="home"?"on":""}`} onClick={()=>go("home")}>Home</button>
+          <div style={{position:"relative"}} onMouseEnter={()=>setSubOpen(true)} onMouseLeave={()=>setSubOpen(false)}>
+            <button className={`nl ${page==="system"?"on":""}`} onClick={()=>go("system")}>The Growth System ▾</button>
+            {subOpen&&(
+              <div style={{position:"absolute",top:"100%",left:0,background:"var(--txt)",border:"1px solid rgba(255,255,255,.12)",borderTop:"2px solid var(--acc)",borderRadius:"0 0 4px 4px",minWidth:230,padding:"8px 0",boxShadow:"0 14px 36px rgba(0,0,0,.3)",zIndex:101}}>
+                <button onClick={()=>go("system")} style={{display:"block",width:"100%",textAlign:"left",padding:"9px 18px",background:"none",border:"none",color:"rgba(255,255,255,.55)",fontSize:12,fontFamily:"var(--fb)",fontWeight:500,cursor:"pointer",borderBottom:"1px solid rgba(255,255,255,.08)",marginBottom:4}}>Overview — The Customer Journey</button>
+                {MODULES.map(([p,l,c])=>(
+                  <button key={p} onClick={()=>go(p)} style={{display:"flex",alignItems:"center",gap:10,width:"100%",textAlign:"left",padding:"9px 18px",background:"none",border:"none",color:"rgba(255,255,255,.7)",fontSize:13,fontFamily:"var(--fb)",cursor:"pointer",transition:"background .15s"}} onMouseEnter={e=>e.currentTarget.style.background="rgba(255,255,255,.06)"} onMouseLeave={e=>e.currentTarget.style.background="none"}>
+                    <span style={{width:9,height:9,borderRadius:2,background:c,flexShrink:0}}/>{l}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+          <button className={`nl ${page==="start"?"on":""}`} onClick={()=>go("start")}>How to Start</button>
+          <button className={`nl ${page==="tool"?"on":""}`} onClick={()=>go("tool")}>Quote Tool</button>
+          <button className={`nl ${page==="pricing"?"on":""}`} onClick={()=>go("pricing")}>Pricing</button>
           <button className="bp" style={{padding:"8px 18px",marginLeft:12,fontSize:12}} onClick={()=>go("contact")}>Book a Demo</button>
         </div>
         <button className="nav-hamburger" onClick={()=>setOpen(o=>!o)} aria-label="Menu">
@@ -185,9 +205,18 @@ function Navbar({page,nav}){
         </button>
       </div>
       <div className={`mob-nav ${open?"open":""}`}>
-        {links.map(([p,l])=>(
-          <button key={p} className={`nl ${page===p?"on":""}`} onClick={()=>go(p)}>{l}</button>
-        ))}
+        <button className={`nl ${page==="home"?"on":""}`} onClick={()=>go("home")}>Home</button>
+        <button className={`nl ${page==="system"?"on":""}`} onClick={()=>go("system")}>The Growth System</button>
+        <div style={{paddingLeft:14,borderLeft:"2px solid rgba(255,255,255,.1)",marginLeft:12,marginBottom:4}}>
+          {MODULES.map(([p,l,c])=>(
+            <button key={p} onClick={()=>go(p)} className="nl" style={{display:"flex",alignItems:"center",gap:9,fontSize:13}}>
+              <span style={{width:8,height:8,borderRadius:2,background:c,flexShrink:0}}/>{l}
+            </button>
+          ))}
+        </div>
+        <button className={`nl ${page==="start"?"on":""}`} onClick={()=>go("start")}>How to Start</button>
+        <button className={`nl ${page==="tool"?"on":""}`} onClick={()=>go("tool")}>Quote Tool</button>
+        <button className={`nl ${page==="pricing"?"on":""}`} onClick={()=>go("pricing")}>Pricing</button>
         <button className="bp" style={{fontSize:13,padding:"11px 0",width:"100%",marginTop:8}} onClick={()=>go("contact")}>Book a Demo</button>
       </div>
     </nav>
@@ -690,7 +719,7 @@ function QuoteTool({rates,onRates}){
   );
 }
 
-// ─── HOME PAGE — conversion-first ─────────────────────────────────────────────
+// ─── HOME PAGE — messaging flow for painters ──────────────────────────────────
 function HomePage({nav}){
   return(
     <div>
@@ -703,11 +732,11 @@ function HomePage({nav}){
                 <span style={{width:6,height:6,borderRadius:"50%",background:"var(--acc)",display:"inline-block"}}/>
                 <span style={{fontFamily:"var(--fh)",fontSize:11,fontWeight:700,letterSpacing:".12em",textTransform:"uppercase",color:"var(--acc)"}}>For Australian painting businesses</span>
               </div>
-              <h1 style={{fontFamily:"var(--fh)",fontSize:"clamp(38px,5.5vw,68px)",fontWeight:700,lineHeight:.98,color:"#fff",marginBottom:20,letterSpacing:"-.01em"}}>
-                Customers arrive quoted, qualified and <span style={{color:"var(--acc)"}}>ready to book.</span>
+              <h1 style={{fontFamily:"var(--fh)",fontSize:"clamp(34px,5vw,60px)",fontWeight:700,lineHeight:1.0,color:"#fff",marginBottom:20,letterSpacing:"-.01em"}}>
+                Grow your paint business — and spend <span style={{color:"var(--acc)"}}>less time than ever</span> finding, quoting and winning customers.
               </h1>
-              <p style={{fontSize:17,color:"rgba(255,255,255,.65)",lineHeight:1.65,marginBottom:22,maxWidth:460}}>
-                You're a painter, not a marketer. PaintIQ runs the marketing, sends the quote in minutes, answers every call and books the meeting — automatically. You turn up as the boss and win the job.
+              <p style={{fontSize:17,color:"rgba(255,255,255,.65)",lineHeight:1.65,marginBottom:22,maxWidth:470}}>
+                PaintIQ does the hard parts for you. The right customers find you, get their own quote, and book a meeting — so you just turn up, talk through the job, and win the work.
               </p>
               <div style={{display:"inline-flex",flexWrap:"wrap",gap:"8px 20px",background:"rgba(255,255,255,.05)",border:"1px solid rgba(255,255,255,.1)",borderRadius:3,padding:"11px 16px",marginBottom:24,fontSize:13,color:"rgba(255,255,255,.75)"}}>
                 {["Live in days","No effort from you","No cost up front","From $99/month"].map(t=>(
@@ -717,8 +746,8 @@ function HomePage({nav}){
                 ))}
               </div>
               <div style={{display:"flex",gap:12,flexWrap:"wrap"}}>
-                <button className="bp" style={{fontSize:14,padding:"14px 32px"}} onClick={()=>nav("tool")}>Try the quote tool</button>
-                <button className="bw" onClick={()=>nav("system")}>See how it works →</button>
+                <button className="bp" style={{fontSize:14,padding:"14px 32px"}} onClick={()=>nav("contact")}>Book a demo</button>
+                <button className="bw" onClick={()=>nav("tool")}>Try the quote tool →</button>
               </div>
             </div>
             <div>
@@ -743,32 +772,90 @@ function HomePage({nav}){
         </div>
       </div>
 
-      {/* THE STORY — your funnel, handled */}
+      {/* WHAT GROWTH ACTUALLY TAKES */}
       <div style={{background:"#fff"}}>
-        <div className="sec" style={{paddingBottom:60}}>
-          <div style={{textAlign:"center",marginBottom:44}}>
-            <div className="tag">How it works</div>
-            <h2 style={{fontFamily:"var(--fh)",fontSize:"clamp(26px,4vw,46px)",fontWeight:700,marginBottom:10}}>You don't need a sales funnel. You need PaintIQ.</h2>
-            <p style={{color:"var(--mut)",maxWidth:560,margin:"0 auto",fontSize:16,lineHeight:1.65}}>Chasing leads, writing quotes, answering calls, following up — that's not painting. PaintIQ does all of it, so every customer you meet is already ready to go.</p>
+        <div className="sec" style={{paddingBottom:56}}>
+          <div style={{textAlign:"center",marginBottom:40}}>
+            <div className="tag">Here's the thing</div>
+            <h2 style={{fontFamily:"var(--fh)",fontSize:"clamp(26px,4vw,44px)",fontWeight:700,marginBottom:12}}>To grow, you need the right customers</h2>
+            <p style={{color:"var(--mut)",maxWidth:580,margin:"0 auto",fontSize:16,lineHeight:1.65}}>Not just any enquiry. You want serious property owners who are ready to go, value a quality paint job — and ideally within 20 minutes of home.</p>
           </div>
-          <div className="g3" style={{gap:20}}>
+          <div className="g3" style={{gap:18,maxWidth:900,margin:"0 auto"}}>
             {[
-              {n:"01",c:"var(--purple)",t:"They find you",b:"Your website, social content and ad campaigns put you in front of homeowners the moment they start looking for a painter."},
-              {n:"02",c:"var(--acc)",t:"They quote themselves",b:"Your quote tool responds in minutes — before the other painters call back. Their details are captured every single time."},
-              {n:"03",c:"var(--navy)",t:"They book you",b:"Every call answered 24/7. Meeting booked into your calendar. You show up as the boss to a customer who's ready to say yes."},
+              {icon:"🎯",t:"Ready to go",b:"Serious about their paint job — not tyre-kickers wasting your time"},
+              {icon:"🏡",t:"Value quality",b:"They understand what a great paint job does for their property"},
+              {icon:"📍",t:"Close to home",b:"Within easy reach, so travel doesn't eat your day"},
+            ].map(c=>(
+              <div key={c.t} style={{background:"var(--surf2)",borderRadius:5,padding:"22px 20px",textAlign:"center"}}>
+                <div style={{fontSize:30,marginBottom:10}}>{c.icon}</div>
+                <h3 style={{fontFamily:"var(--fh)",fontSize:17,fontWeight:700,marginBottom:6}}>{c.t}</h3>
+                <p style={{color:"var(--mut)",fontSize:14,lineHeight:1.6}}>{c.b}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* THE WASTED TIME */}
+      <div style={{background:"var(--surf2)"}}>
+        <div className="sec">
+          <div className="mob-col" style={{gap:44}}>
+            <div>
+              <div className="tag">The old way</div>
+              <h2 style={{fontFamily:"var(--fh)",fontSize:"clamp(24px,3.5vw,40px)",fontWeight:700,lineHeight:1.05,marginBottom:16}}>Normally, that's a LOT of work — and most of it is wasted</h2>
+              <p style={{color:"var(--mut)",fontSize:16,lineHeight:1.7,marginBottom:18}}>Finding those customers and winning them normally means doing all of this yourself — usually at night, after a full day on the tools:</p>
+              {[
+                "Chasing leads and answering every call",
+                "Driving across town to quote jobs that go nowhere",
+                "Writing up quotes by hand, late at night",
+                "Following up people who never reply",
+                "Posting on social media when you remember",
+                "Missing calls while you're up a ladder",
+              ].map(l=>(
+                <div key={l} style={{display:"flex",gap:10,marginBottom:11,fontSize:15,color:"var(--mut)"}}>
+                  <span style={{color:"#E84040",fontWeight:700,flexShrink:0}}>✗</span>{l}
+                </div>
+              ))}
+            </div>
+            <div>
+              <div style={{background:"var(--txt)",borderRadius:6,padding:"32px 28px",color:"#fff"}}>
+                <div style={{fontFamily:"var(--fh)",fontSize:48,fontWeight:700,color:"var(--acc)",lineHeight:1,marginBottom:8}}>Hours</div>
+                <div style={{fontFamily:"var(--fh)",fontSize:22,fontWeight:700,marginBottom:14}}>every single week</div>
+                <p style={{fontSize:15,color:"rgba(255,255,255,.7)",lineHeight:1.7}}>Time spent on customer admin is time you're not painting, not with family, and not making money. Worse — half those enquiries were never going to book anyway. It's the most frustrating part of running a paint business.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* THE SOLUTION */}
+      <div style={{background:"#fff"}}>
+        <div className="sec">
+          <div style={{textAlign:"center",marginBottom:44}}>
+            <div className="tag">The PaintIQ way</div>
+            <h2 style={{fontFamily:"var(--fh)",fontSize:"clamp(26px,4vw,44px)",fontWeight:700,marginBottom:12}}>Hot customers arrive ready to book</h2>
+            <p style={{color:"var(--mut)",maxWidth:580,margin:"0 auto",fontSize:16,lineHeight:1.65}}>PaintIQ flips it around. Instead of you chasing customers, the right ones come to you — already quoted and ready to meet.</p>
+          </div>
+          <div className="g3" style={{gap:20,marginBottom:36}}>
+            {[
+              {n:"01",c:"var(--purple)",t:"They arrive at your website",b:"The right property owners find you — through search, social and smart campaigns."},
+              {n:"02",c:"var(--acc)",t:"They quote themselves",b:"Your AI quote tool answers their biggest question instantly, while they're hot and interested."},
+              {n:"03",c:"var(--navy)",t:"They book a meeting with you",b:"PaintIQ books them in. You meet, talk through the job, agree the spec and win the work."},
             ].map(s=>(
               <div key={s.n} style={{position:"relative",background:"var(--surf2)",borderRadius:5,padding:"28px 24px",overflow:"hidden"}}>
                 <div className="step-num">{s.n}</div>
                 <div style={{position:"relative"}}>
                   <div style={{width:40,height:5,background:s.c,borderRadius:2,marginBottom:14}}/>
-                  <h3 style={{fontFamily:"var(--fh)",fontSize:21,fontWeight:700,marginBottom:8}}>{s.t}</h3>
+                  <h3 style={{fontFamily:"var(--fh)",fontSize:20,fontWeight:700,marginBottom:8}}>{s.t}</h3>
                   <p style={{color:"var(--mut)",fontSize:14,lineHeight:1.7}}>{s.b}</p>
                 </div>
               </div>
             ))}
           </div>
-          <div style={{textAlign:"center",marginTop:28}}>
-            <button className="bs" onClick={()=>nav("system")}>See the full system →</button>
+          <div style={{background:"var(--acc)",borderRadius:6,padding:"28px 32px",textAlign:"center"}}>
+            <p style={{fontFamily:"var(--fh)",fontSize:"clamp(18px,2.5vw,26px)",fontWeight:700,color:"#fff",lineHeight:1.3,maxWidth:720,margin:"0 auto"}}>
+              You work LESS on chasing customers — and spend MORE time on the painting. The part you actually love.
+            </p>
           </div>
         </div>
       </div>
@@ -781,7 +868,7 @@ function HomePage({nav}){
               ["62%","of homeowners won't leave a voicemail — they call the next painter"],
               ["15–35%","more jobs won by the painter who responds first with a quote"],
               ["$8K–$15K","average residential painting job in Australia"],
-              ["2.25×","typical growth running the full PaintIQ system for 12 months"],
+              ["20 min","the ideal radius for the jobs worth winning"],
             ].map(([n,l])=>(
               <div key={n} style={{textAlign:"center",padding:"8px 16px"}}>
                 <div style={{fontFamily:"var(--fh)",fontSize:"clamp(26px,3vw,40px)",fontWeight:700,color:"var(--acc)",lineHeight:1}}>{n}</div>
@@ -792,18 +879,17 @@ function HomePage({nav}){
         </div>
       </div>
 
-      {/* CHOOSE YOUR PATH */}
+      {/* NEW / EARLY ADOPTER */}
       <div style={{background:"var(--surf2)"}}>
-        <div className="sec">
-          <div style={{textAlign:"center",marginBottom:40}}>
-            <div className="tag">Where do you want to start?</div>
-            <h2 style={{fontFamily:"var(--fh)",fontSize:"clamp(26px,4vw,46px)",fontWeight:700}}>Pick your path</h2>
-          </div>
-          <div className="g3" style={{gap:18,marginBottom:28}}>
+        <div className="sec" style={{textAlign:"center"}}>
+          <div className="tag">Be early</div>
+          <h2 style={{fontFamily:"var(--fh)",fontSize:"clamp(26px,4vw,44px)",fontWeight:700,marginBottom:14,maxWidth:760,marginLeft:"auto",marginRight:"auto"}}>PaintIQ is new. It's AI. It's built for Aussie paint businesses.</h2>
+          <p style={{color:"var(--mut)",maxWidth:560,margin:"0 auto 32px",fontSize:16,lineHeight:1.7}}>The painters who embrace it will grow — doing less of the customer-chasing stuff, and more of the work they love. Beat your competitors to it.</p>
+          <div className="g3" style={{gap:18,maxWidth:920,margin:"0 auto 36px"}}>
             {[
-              {icon:"🧮",c:"var(--acc)",t:"Try the Quote Tool",b:"See exactly what your customers will experience. Get a live estimate in under 3 minutes.",btn:"Try it now →",page:"tool"},
-              {icon:"🧩",c:"var(--teal)",t:"See the System",b:"Five pieces that fit together. Start with one, add as you grow. See how it all connects.",btn:"How it works →",page:"system"},
-              {icon:"📈",c:"var(--navy)",t:"Check Your ROI",b:"Put in your numbers. See what PaintIQ could add to your monthly revenue — live.",btn:"Run the numbers →",page:"pricing"},
+              {icon:"🧮",c:"var(--acc)",t:"Try the Quote Tool",b:"See exactly what your customers will experience.",btn:"Try it now →",page:"tool"},
+              {icon:"🧩",c:"var(--teal)",t:"See the Growth System",b:"How the whole system delivers hot leads ready to book.",btn:"How it works →",page:"system"},
+              {icon:"📈",c:"var(--navy)",t:"Check Your ROI",b:"Put in your numbers, see what PaintIQ could add.",btn:"Run the numbers →",page:"pricing"},
             ].map(p=>(
               <div key={p.t} className="path-card" onClick={()=>nav(p.page)}>
                 <div style={{width:48,height:48,background:p.c,borderRadius:4,display:"flex",alignItems:"center",justifyContent:"center",fontSize:22,marginBottom:16}}>{p.icon}</div>
@@ -813,108 +899,129 @@ function HomePage({nav}){
               </div>
             ))}
           </div>
-          <div style={{textAlign:"center"}}>
-            <p style={{color:"var(--mut)",fontSize:14,marginBottom:14}}>Or skip straight to a conversation:</p>
-            <button className="bp" style={{fontSize:14,padding:"14px 36px"}} onClick={()=>nav("contact")}>Book a free 20-minute demo</button>
+          <div style={{display:"flex",gap:12,justifyContent:"center",flexWrap:"wrap"}}>
+            <button className="bp" style={{fontSize:15,padding:"15px 36px"}} onClick={()=>nav("contact")}>Sign up today</button>
+            <button className="bs" onClick={()=>nav("contact")}>Book a demo — we'll show you how</button>
           </div>
-        </div>
-      </div>
-
-      {/* FINAL CTA */}
-      <div style={{background:"var(--txt)",padding:"64px 24px",textAlign:"center"}}>
-        <div style={{maxWidth:660,margin:"0 auto"}}>
-          <h2 style={{fontFamily:"var(--fh)",fontSize:"clamp(26px,4vw,46px)",fontWeight:700,color:"#fff",marginBottom:12}}>The next customer who calls three painters — be the one who answers.</h2>
-          <p style={{color:"rgba(255,255,255,.6)",fontSize:16,marginBottom:28,lineHeight:1.65}}>Live in days. No cost up front. From $99/month. One extra job pays for the whole year.</p>
-          <button className="bp" style={{fontSize:15,padding:"15px 36px"}} onClick={()=>nav("contact")}>Book a demo</button>
         </div>
       </div>
     </div>
   );
 }
 
-// ─── SYSTEM PAGE — the jigsaw ─────────────────────────────────────────────────
+// ─── GROWTH SYSTEM PAGE — the customer journey funnel ─────────────────────────
 function SystemPage({nav}){
-  const STAGES=[
-    {stage:"ATTRACT",sub:"Get seen by homeowners",products:[
-      {name:"PaintIQ Social",price:"$199/mo",c:"#7A2090",page:"leads",d:"Done-for-you posts keep you visible between jobs"},
-      {name:"PaintIQ Leads",price:"$297/mo",c:"#D4860A",page:"leads",d:"Google Ads and campaigns bring buyers to you"},
-    ]},
-    {stage:"CONVERT",sub:"Turn lookers into leads",products:[
-      {name:"PaintIQ Website",price:"$149/mo",c:"#0D6E56",page:"growth",d:"A site built to convert — live in 3 days"},
-      {name:"PaintIQ Quote Tool",price:"$99/mo",c:"#E8420A",page:"tool",d:"Instant quotes. Every lead captured first"},
-    ]},
-    {stage:"NEVER MISS",sub:"Capture every call",products:[
-      {name:"PaintIQ Voice",price:"$149/mo",c:"#0F2744",page:"voice",d:"AI answers 24/7, qualifies and books the meeting"},
-    ]},
+  const JOURNEY=[
+    {step:"BE FOUND",by:"by property owners & managers",product:"PaintIQ Leads",price:"$297/mo",c:"#D4860A",page:"leads",d:"Smart campaigns put you in front of the right property owners — the serious ones, close to home."},
+    {step:"SHOW YOUR EXPERTISE",by:"build trust before they call",product:"PaintIQ Social",price:"$199/mo",c:"#7A2090",page:"leads",d:"Done-for-you social content shows off your work and proves you're the real deal."},
+    {step:"OUTLINE YOUR SERVICES",by:"give them somewhere to land",product:"PaintIQ Website",price:"$149/mo",c:"#0D6E56",page:"growth",d:"A professional site that shows what you do and turns visitors into enquiries."},
+    {step:"ANSWER THEIR BIG QUESTION",by:"while they're hot & on your site",product:"PaintIQ Quote Tool",price:"$99/mo",c:"#E8420A",page:"tool",d:"\"How much will it cost?\" — answered instantly. Every lead captured before the reveal."},
+    {step:"CAPTURE EVERY PROSPECT",by:"never miss one again",product:"PaintIQ Voice",price:"$149/mo",c:"#0F2744",page:"voice",d:"AI answers every call 24/7, qualifies the job, and makes sure no hot prospect slips away."},
   ];
   return(
     <div>
       <div style={{background:"var(--txt)",padding:"64px 24px 56px",textAlign:"center"}}>
-        <div className="tag" style={{background:"rgba(255,255,255,.06)",color:"#fff",borderColor:"rgba(255,255,255,.15)"}}>The PaintIQ System</div>
-        <h1 style={{fontFamily:"var(--fh)",fontSize:"clamp(30px,5vw,56px)",fontWeight:700,color:"#fff",marginBottom:12}}>One system. Five pieces.<br/><span style={{color:"var(--acc)"}}>Start with one.</span></h1>
-        <p style={{color:"rgba(255,255,255,.6)",fontSize:16,maxWidth:540,margin:"0 auto",lineHeight:1.65}}>Each piece works on its own. Together, they hand you customers who are quoted, qualified and ready to book. Add pieces whenever you want to accelerate.</p>
+        <div className="tag" style={{background:"rgba(255,255,255,.06)",color:"#fff",borderColor:"rgba(255,255,255,.15)"}}>The Growth System · The Customer Journey</div>
+        <h1 style={{fontFamily:"var(--fh)",fontSize:"clamp(30px,5vw,56px)",fontWeight:700,color:"#fff",marginBottom:12}}>How PaintIQ delivers you<br/><span style={{color:"var(--acc)"}}>smoking hot leads, ready to book.</span></h1>
+        <p style={{color:"rgba(255,255,255,.6)",fontSize:16,maxWidth:560,margin:"0 auto",lineHeight:1.65}}>Each PaintIQ product handles one stage of your customer's journey — from never having heard of you, to sitting in front of you ready to start.</p>
       </div>
 
-      {/* PIPELINE */}
       <div className="sec" style={{paddingTop:56}}>
-        <div style={{display:"flex",flexDirection:"column",gap:14}}>
-          {STAGES.map((st,i)=>(
-            <div key={st.stage}>
-              <div style={{display:"flex",alignItems:"center",gap:14,marginBottom:10}}>
-                <div style={{fontFamily:"var(--fh)",fontSize:13,fontWeight:700,letterSpacing:".14em",color:"var(--acc)"}}>{st.stage}</div>
-                <div style={{flex:1,height:1,background:"var(--bdr)"}}/>
-                <div style={{color:"var(--mut)",fontSize:13}}>{st.sub}</div>
-              </div>
-              <div style={{display:"grid",gridTemplateColumns:st.products.length>1?"1fr 1fr":"1fr",gap:12}} className={st.products.length>1?"mob-col-s":""}>
-                {st.products.map(p=>(
-                  <div key={p.name} className="tile" style={{background:p.c}} onClick={()=>nav(p.page)}>
-                    <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",gap:12,flexWrap:"wrap"}}>
-                      <div>
-                        <div style={{fontFamily:"var(--fh)",fontSize:19,fontWeight:700,marginBottom:4}}>{p.name}</div>
-                        <p style={{fontSize:13,opacity:.8,lineHeight:1.5,maxWidth:340}}>{p.d}</p>
-                      </div>
-                      <div style={{textAlign:"right",flexShrink:0}}>
-                        <div style={{fontFamily:"var(--fh)",fontSize:18,fontWeight:700}}>{p.price}</div>
-                        <div style={{fontSize:11,opacity:.7,marginTop:2}}>Learn more →</div>
-                      </div>
+        <div style={{display:"flex",flexDirection:"column",gap:0,maxWidth:780,margin:"0 auto"}}>
+          {JOURNEY.map((j,i)=>(
+            <div key={j.step}>
+              <div className="tile" style={{background:j.c,cursor:"pointer"}} onClick={()=>nav(j.page)}>
+                <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",gap:16,flexWrap:"wrap"}}>
+                  <div style={{flex:1,minWidth:220}}>
+                    <div style={{display:"flex",alignItems:"center",gap:10,marginBottom:6}}>
+                      <div style={{width:28,height:28,borderRadius:"50%",background:"rgba(255,255,255,.2)",display:"flex",alignItems:"center",justifyContent:"center",fontFamily:"var(--fh)",fontSize:13,fontWeight:700,flexShrink:0}}>{i+1}</div>
+                      <div style={{fontFamily:"var(--fh)",fontSize:18,fontWeight:700,letterSpacing:".02em"}}>{j.step}</div>
                     </div>
+                    <div style={{fontSize:12,opacity:.7,textTransform:"uppercase",letterSpacing:".06em",marginBottom:10,marginLeft:38}}>{j.by}</div>
+                    <p style={{fontSize:14,opacity:.9,lineHeight:1.6,marginLeft:38,maxWidth:380}}>{j.d}</p>
                   </div>
-                ))}
+                  <div style={{textAlign:"right",flexShrink:0}}>
+                    <div style={{fontFamily:"var(--fh)",fontSize:16,fontWeight:700}}>{j.product}</div>
+                    <div style={{fontSize:13,opacity:.85,marginTop:2}}>{j.price}</div>
+                    <div style={{fontSize:11,opacity:.7,marginTop:6}}>Learn more →</div>
+                  </div>
+                </div>
               </div>
-              {i<STAGES.length-1&&<div style={{textAlign:"center",color:"var(--acc)",fontSize:20,padding:"6px 0",fontWeight:700}}>↓</div>}
+              <div style={{textAlign:"center",color:"var(--acc)",fontSize:22,padding:"8px 0",fontWeight:700}}>↓</div>
             </div>
           ))}
-        </div>
-
-        {/* START SMALL */}
-        <div style={{marginTop:56,background:"var(--surf2)",borderRadius:6,padding:"32px 28px",border:"1px solid var(--bdr)"}}>
-          <div className="mob-col" style={{gap:32}}>
-            <div>
-              <div className="tag">Most painters start here</div>
-              <h2 style={{fontFamily:"var(--fh)",fontSize:"clamp(22px,3vw,34px)",fontWeight:700,marginBottom:12}}>Start with the Quote Tool. Add pieces when you're ready.</h2>
-              <p style={{color:"var(--mut)",fontSize:15,lineHeight:1.7,marginBottom:16}}>Already have a website? We put the PaintIQ Quote Tool on it and you're quoting instantly from day one — $99/month, nothing up front. No website? We build you one with the Quote Tool inside, live in 3 days.</p>
-              <p style={{color:"var(--mut)",fontSize:15,lineHeight:1.7}}>Then, when you want more enquiries — add Voice so you never miss a call. Add Social to stay visible. Add Leads to turn on the tap. Every piece clicks into the same system.</p>
-            </div>
-            <div style={{display:"flex",flexDirection:"column",gap:10}}>
-              {[
-                ["Step 1","Quote Tool on your existing site","$99/mo"],
-                ["Step 2","Add Voice — every call answered","+$149/mo"],
-                ["Step 3","Add Social — stay front of mind","+$199/mo"],
-                ["Step 4","Add Leads — turn on the tap","+$297/mo"],
-              ].map(([s,t,p])=>(
-                <div key={s} style={{display:"flex",alignItems:"center",gap:14,background:"#fff",border:"1px solid var(--bdr)",borderRadius:4,padding:"13px 16px"}}>
-                  <div style={{fontFamily:"var(--fh)",fontSize:11,fontWeight:700,color:"var(--acc)",letterSpacing:".08em",textTransform:"uppercase",flexShrink:0,width:52}}>{s}</div>
-                  <div style={{flex:1,fontSize:14}}>{t}</div>
-                  <div style={{fontFamily:"var(--fh)",fontSize:14,fontWeight:700,flexShrink:0}}>{p}</div>
-                </div>
-              ))}
+          {/* ANCHOR — MEETS */}
+          <div style={{background:"var(--txt)",borderRadius:6,padding:"30px 28px",color:"#fff",border:"2px solid var(--acc)"}}>
+            <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",gap:16,flexWrap:"wrap"}}>
+              <div style={{flex:1,minWidth:220}}>
+                <div style={{display:"inline-block",background:"var(--acc)",color:"#fff",fontFamily:"var(--fh)",fontSize:11,fontWeight:700,letterSpacing:".1em",textTransform:"uppercase",padding:"4px 10px",borderRadius:2,marginBottom:12}}>The outcome</div>
+                <h2 style={{fontFamily:"var(--fh)",fontSize:24,fontWeight:700,marginBottom:8}}>🔥 PaintIQ Meets</h2>
+                <p style={{fontSize:15,color:"rgba(255,255,255,.75)",lineHeight:1.65,maxWidth:440}}>The whole system is anchored by the booking service. PaintIQ Meets books your now-red-hot prospect into an in-person or online meeting. All you do is talk through the quote, connect in person, and book the job.</p>
+              </div>
+              <div style={{textAlign:"right",flexShrink:0}}>
+                <div style={{fontFamily:"var(--fh)",fontSize:22,fontWeight:700,color:"var(--acc)"}}>Included</div>
+                <div style={{fontSize:12,color:"rgba(255,255,255,.6)",marginTop:2}}>free with any product</div>
+              </div>
             </div>
           </div>
         </div>
 
-        <div style={{textAlign:"center",marginTop:36,display:"flex",gap:12,justifyContent:"center",flexWrap:"wrap"}}>
-          <button className="bp" style={{fontSize:14,padding:"14px 32px"}} onClick={()=>nav("pricing")}>See pricing & run your ROI →</button>
-          <button className="bs" onClick={()=>nav("contact")}>Book a demo</button>
+        <div style={{textAlign:"center",marginTop:44}}>
+          <h3 style={{fontFamily:"var(--fh)",fontSize:"clamp(20px,3vw,30px)",fontWeight:700,marginBottom:10}}>That's a prospect who's on fire — and all you did was turn up.</h3>
+          <p style={{color:"var(--mut)",fontSize:15,maxWidth:520,margin:"0 auto 24px",lineHeight:1.65}}>Want to know how to roll this out for your business? You don't need all of it at once.</p>
+          <div style={{display:"flex",gap:12,justifyContent:"center",flexWrap:"wrap"}}>
+            <button className="bp" style={{fontSize:14,padding:"14px 32px"}} onClick={()=>nav("start")}>How to get started →</button>
+            <button className="bs" onClick={()=>nav("contact")}>Book a demo</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ─── HOW TO START PAGE — onboarding / deployment order ────────────────────────
+function StartPage({nav}){
+  const ORDER=[
+    {n:"01",product:"PaintIQ Website",price:"$149/mo",c:"#0D6E56",page:"growth",when:"If you don't have a good website yet",d:"Start here. We build you a professional site in 3 days — with the Quote Tool built right in. Already have a site you like? Skip to step 2."},
+    {n:"02",product:"PaintIQ Quote Tool",price:"$99/mo",c:"#E8420A",page:"tool",when:"The engine of the whole system",d:"Goes on your website (ours or yours). Customers quote themselves instantly — and you capture every lead. This is where most painters start."},
+    {n:"03",product:"PaintIQ Meets",price:"Included",c:"#1A3A5C",page:"contact",when:"Free with any product",d:"The booking service. Turns a hot quote into a booked meeting in your calendar, automatically. Comes free — switch it on and go."},
+    {n:"04",product:"PaintIQ Voice",price:"$149/mo",c:"#0F2744",page:"voice",when:"When you can't afford to miss a call",d:"AI answers every call 24/7 so no hot prospect ever slips away while you're on the tools."},
+    {n:"05",product:"PaintIQ Social",price:"$199/mo",c:"#7A2090",page:"leads",when:"When you want to stay visible",d:"Done-for-you content keeps you in front of property owners between jobs and builds your reputation."},
+    {n:"06",product:"PaintIQ Leads",price:"$297/mo",c:"#D4860A",page:"leads",when:"When you're ready to turn on the tap",d:"Paid campaigns actively drive the right property owners to your site. The accelerator — add it when you want to grow fast."},
+  ];
+  return(
+    <div>
+      <div style={{background:"var(--txt)",padding:"64px 24px 56px",textAlign:"center"}}>
+        <div className="tag" style={{background:"rgba(255,255,255,.06)",color:"#fff",borderColor:"rgba(255,255,255,.15)"}}>How to Start · Onboarding</div>
+        <h1 style={{fontFamily:"var(--fh)",fontSize:"clamp(30px,5vw,56px)",fontWeight:700,color:"#fff",marginBottom:12}}>Deploy it your way —<br/><span style={{color:"var(--acc)"}}>one piece at a time, or all at once.</span></h1>
+        <p style={{color:"rgba(255,255,255,.6)",fontSize:16,maxWidth:600,margin:"0 auto",lineHeight:1.65}}>It all depends on how much you want to grow, how fast you want to stop wasting time on bad enquiries, and how quickly you want to start booking more jobs at higher fees. Here's the order most paint businesses adopt PaintIQ.</p>
+      </div>
+
+      <div className="sec" style={{paddingTop:56}}>
+        <div style={{display:"flex",flexDirection:"column",gap:12,maxWidth:820,margin:"0 auto"}}>
+          {ORDER.map(o=>(
+            <div key={o.n} style={{background:"#fff",border:"1px solid var(--bdr)",borderRadius:5,padding:"22px 24px",display:"flex",gap:20,alignItems:"flex-start",flexWrap:"wrap",transition:"transform .2s,box-shadow .2s",cursor:"pointer"}} className="feat-card" onClick={()=>nav(o.page)}>
+              <div style={{width:52,height:52,background:o.c,borderRadius:5,display:"flex",alignItems:"center",justifyContent:"center",fontFamily:"var(--fh)",fontSize:20,fontWeight:700,color:"#fff",flexShrink:0}}>{o.n}</div>
+              <div style={{flex:1,minWidth:240}}>
+                <div style={{display:"flex",alignItems:"baseline",gap:10,flexWrap:"wrap",marginBottom:4}}>
+                  <h3 style={{fontFamily:"var(--fh)",fontSize:20,fontWeight:700}}>{o.product}</h3>
+                  <span style={{fontFamily:"var(--fh)",fontSize:15,fontWeight:700,color:o.c}}>{o.price}</span>
+                </div>
+                <div style={{fontSize:12,color:o.c,fontWeight:600,textTransform:"uppercase",letterSpacing:".05em",marginBottom:8}}>{o.when}</div>
+                <p style={{color:"var(--mut)",fontSize:14,lineHeight:1.65}}>{o.d}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <div style={{marginTop:44,background:"var(--surf2)",borderRadius:6,padding:"32px 28px",border:"1px solid var(--bdr)",textAlign:"center"}}>
+          <h2 style={{fontFamily:"var(--fh)",fontSize:"clamp(22px,3vw,34px)",fontWeight:700,marginBottom:12}}>Start with one. Or take the lot.</h2>
+          <p style={{color:"var(--mut)",fontSize:15,maxWidth:600,margin:"0 auto 8px",lineHeight:1.7}}>Most painters start with the Quote Tool on a website — then add Voice, Social and Leads as they feel the difference. The more you switch on, the more of your customer journey runs itself.</p>
+          <p style={{color:"var(--mut)",fontSize:15,maxWidth:600,margin:"0 auto 24px",lineHeight:1.7}}>Want everything working together from day one? Take the full system for <strong style={{color:"var(--txt)"}}>$699/month</strong> and save over $190.</p>
+          <div style={{display:"flex",gap:12,justifyContent:"center",flexWrap:"wrap"}}>
+            <button className="bp" style={{fontSize:14,padding:"14px 32px"}} onClick={()=>nav("pricing")}>See pricing & ROI →</button>
+            <button className="bs" onClick={()=>nav("contact")}>Book a demo</button>
+          </div>
         </div>
       </div>
     </div>
@@ -1028,6 +1135,8 @@ const PKGS=[
    items:["16 posts/month FB + Instagram","Before/after content done for you","Google Business posts","Review generation prompts","Monthly engagement report","Reels & short video"]},
   {color:"#D4860A",n:"05",name:"PaintIQ Leads",tag:"Turn on the tap.",mo:"$297/mo",
    items:["Google Ads management","Local SEO foundation","Campaign landing pages","Email follow-up sequences","Retargeting campaigns","Monthly strategy call"]},
+  {color:"#1A3A5C",n:"+",name:"PaintIQ Meets",tag:"The booking engine. Free with any product.",mo:"Included",
+   items:["Online & in-person meeting booking","Books hot prospects into your calendar","Automatic reminders to reduce no-shows","Syncs with your existing calendar","Comes free with any PaintIQ product","The anchor that closes the loop"]},
 ];
 
 function PricingPage({nav}){
@@ -1366,6 +1475,7 @@ export default function App(){
       <Navbar page={page} nav={nav}/>
       {page==="home"    &&<HomePage     nav={nav}/>}
       {page==="system"  &&<SystemPage   nav={nav}/>}
+      {page==="start"   &&<StartPage    nav={nav}/>}
       {page==="tool"    &&<QuoteToolPage rates={rates} onRates={()=>setShowRates(true)}/>}
       {page==="pricing" &&<PricingPage  nav={nav}/>}
       {page==="growth"  &&<WebsiteGrowthPage nav={nav}/>}
