@@ -39,7 +39,7 @@ function calcEst(f,r){
 const $$=n=>"$"+Math.round(n).toLocaleString("en-AU");
 
 // ─── FONTS & CSS ──────────────────────────────────────────────────────────────
-const FONTS_URL="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap";
+const FONTS_URL="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&display=swap";
 
 const CSS=`
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
@@ -47,7 +47,7 @@ const CSS=`
   --bg:#FAFAF8; --surf:#FFFFFF; --surf2:#F2F0EB; --bdr:#E5E0D8;
   --txt:#1A1714; --mut:#7A7570; --acc:#E8420A; --teal:#0D6E56;
   --navy:#0F2744; --amber:#D4860A; --purple:#7A2090; --grn:#1A6B35;
-  --fh:'Oswald',sans-serif; --fb:'Inter',sans-serif;
+  --fh:'Oswald',sans-serif; --fb:'Inter',sans-serif; --fl:'Space Grotesk',sans-serif;
 }
 html,body{background:var(--bg);color:var(--txt);font-family:var(--fb);}
 h1,h2,h3,h4{font-family:var(--fh);}
@@ -164,6 +164,27 @@ function Toggle({checked,onChange,label}){
   );
 }
 
+// ─── LOGO ─────────────────────────────────────────────────────────────────────
+function Logo({size=26,dark=false,onClick,icon=true,tagline=false}){
+  const iconSz=Math.round(size*1.7);
+  const r=Math.round(iconSz*0.24);
+  return(
+    <button onClick={onClick} style={{display:"inline-flex",alignItems:"center",gap:size*0.42,background:"none",border:"none",cursor:onClick?"pointer":"default",padding:0}}>
+      {icon&&(
+        <span style={{width:iconSz,height:iconSz,borderRadius:r,background:dark?"rgba(255,255,255,.08)":"#1A1714",display:"inline-flex",flexShrink:0,position:"relative",overflow:"hidden"}}>
+          <svg width={iconSz} height={iconSz} viewBox="0 0 46 46" style={{display:"block"}}>
+            <path d="M8 46 L8 28 L38 17 L38 46 Z" fill="#E8420A"/>
+          </svg>
+        </span>
+      )}
+      <span style={{display:"inline-flex",flexDirection:"column",alignItems:"flex-start",lineHeight:1}}>
+        <span style={{fontFamily:"var(--fl)",fontSize:size,fontWeight:700,letterSpacing:"-.02em",color:dark?"#fff":"#1A1714"}}>paint<span style={{color:"#E8420A"}}>IQ</span></span>
+        {tagline&&<span style={{fontFamily:"var(--fb)",fontSize:Math.max(8,size*0.3),fontWeight:600,letterSpacing:".22em",color:dark?"rgba(255,255,255,.45)":"#9A958F",marginTop:size*0.22,textTransform:"uppercase"}}>Grow your business</span>}
+      </span>
+    </button>
+  );
+}
+
 function Navbar({page,nav}){
   const [open,setOpen]=useState(false);
   const [subOpen,setSubOpen]=useState(false);
@@ -177,7 +198,7 @@ function Navbar({page,nav}){
   return(
     <nav className="nav">
       <div className="nav-in">
-        <button className="logo" onClick={()=>go("home")}>Paint<span className="logo-iq">IQ</span></button>
+        <Logo size={22} dark onClick={()=>go("home")}/>
         <div className="nav-wide" style={{display:"flex",gap:2,alignItems:"center"}}>
           <button className={`nl ${page==="home"?"on":""}`} onClick={()=>go("home")}>Home</button>
           <div style={{position:"relative"}} onMouseEnter={()=>setSubOpen(true)} onMouseLeave={()=>setSubOpen(false)}>
@@ -231,7 +252,7 @@ function Footer({nav}){
       <div style={{maxWidth:1200,margin:"0 auto",padding:"56px 24px 0"}}>
         <div style={{marginBottom:40,paddingBottom:32,borderBottom:"1px solid rgba(255,255,255,.07)",display:"flex",alignItems:"flex-start",justifyContent:"space-between",flexWrap:"wrap",gap:20}}>
           <div>
-            <div><span style={{fontFamily:"var(--fh)",fontSize:32,fontWeight:700,color:"#fff"}}>Paint</span><span style={{fontFamily:"var(--fh)",fontSize:32,fontWeight:700,color:"var(--acc)"}}>IQ</span></div>
+            <Logo size={26} dark icon tagline/>
             <p style={{fontSize:13,marginTop:6,maxWidth:340,lineHeight:1.65,color:"rgba(255,255,255,.45)"}}>The complete growth system for Australian painting businesses. Customers arrive quoted, qualified and ready to book.</p>
           </div>
           <button className="bp" style={{alignSelf:"flex-start",fontSize:12,padding:"11px 22px"}} onClick={()=>nav("contact")}>Book a demo</button>
@@ -732,11 +753,11 @@ function HomePage({nav}){
                 <span style={{width:6,height:6,borderRadius:"50%",background:"var(--acc)",display:"inline-block"}}/>
                 <span style={{fontFamily:"var(--fh)",fontSize:11,fontWeight:700,letterSpacing:".12em",textTransform:"uppercase",color:"var(--acc)"}}>For Australian painting businesses</span>
               </div>
-              <h1 style={{fontFamily:"var(--fh)",fontSize:"clamp(34px,5vw,60px)",fontWeight:700,lineHeight:1.0,color:"#fff",marginBottom:20,letterSpacing:"-.01em"}}>
-                Grow your paint business — and spend <span style={{color:"var(--acc)"}}>less time than ever</span> finding, quoting and winning customers.
+              <h1 style={{fontFamily:"var(--fh)",fontSize:"clamp(48px,7vw,88px)",fontWeight:700,lineHeight:.95,color:"#fff",marginBottom:18,letterSpacing:"-.02em"}}>
+                Do less.<br/><span style={{color:"var(--acc)"}}>Win more.</span>
               </h1>
-              <p style={{fontSize:17,color:"rgba(255,255,255,.65)",lineHeight:1.65,marginBottom:22,maxWidth:470}}>
-                PaintIQ does the hard parts for you. The right customers find you, get their own quote, and book a meeting — so you just turn up, talk through the job, and win the work.
+              <p style={{fontSize:18,color:"rgba(255,255,255,.7)",lineHeight:1.6,marginBottom:24,maxWidth:460}}>
+                PaintIQ delivers smoking-hot leads, ready to book — so you spend less time chasing customers and more time painting. Book a demo and see how.
               </p>
               <div style={{display:"inline-flex",flexWrap:"wrap",gap:"8px 20px",background:"rgba(255,255,255,.05)",border:"1px solid rgba(255,255,255,.1)",borderRadius:3,padding:"11px 16px",marginBottom:24,fontSize:13,color:"rgba(255,255,255,.75)"}}>
                 {["Live in days","No effort from you","No cost up front","From $99/month"].map(t=>(
