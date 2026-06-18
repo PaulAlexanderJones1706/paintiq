@@ -171,9 +171,9 @@ function Logo({size=26,dark=false,onClick,icon=true,tagline=false}){
   return(
     <button onClick={onClick} style={{display:"inline-flex",alignItems:"center",gap:size*0.42,background:"none",border:"none",cursor:onClick?"pointer":"default",padding:0}}>
       {icon&&(
-        <span style={{width:iconSz,height:iconSz,borderRadius:r,background:dark?"rgba(255,255,255,.08)":"#1A1714",display:"inline-flex",flexShrink:0,position:"relative",overflow:"hidden"}}>
+        <span style={{width:iconSz,height:iconSz,borderRadius:r,background:"#E8420A",display:"inline-flex",flexShrink:0,position:"relative",overflow:"hidden"}}>
           <svg width={iconSz} height={iconSz} viewBox="0 0 46 46" style={{display:"block"}}>
-            <path d="M8 46 L8 28 L38 17 L38 46 Z" fill="#E8420A"/>
+            <path d="M23 9 C23 9 14 23 14 31 a9 9 0 1 0 18 0 C32 23 23 9 23 9 Z" fill="#FFFFFF"/>
           </svg>
         </span>
       )}
@@ -753,8 +753,8 @@ function HomePage({nav}){
                 <span style={{width:6,height:6,borderRadius:"50%",background:"var(--acc)",display:"inline-block"}}/>
                 <span style={{fontFamily:"var(--fh)",fontSize:11,fontWeight:700,letterSpacing:".12em",textTransform:"uppercase",color:"var(--acc)"}}>For Australian painting businesses</span>
               </div>
-              <h1 style={{fontFamily:"var(--fh)",fontSize:"clamp(48px,7vw,88px)",fontWeight:700,lineHeight:.95,color:"#fff",marginBottom:18,letterSpacing:"-.02em"}}>
-                Do less.<br/><span style={{color:"var(--acc)"}}>Win more.</span>
+              <h1 style={{fontFamily:"var(--fh)",fontSize:"clamp(40px,6vw,76px)",fontWeight:700,lineHeight:.96,color:"#fff",marginBottom:18,letterSpacing:"-.02em"}}>
+                Less chasing.<br/>More painting.<br/><span style={{color:"var(--acc)"}}>Equals more money.</span>
               </h1>
               <p style={{fontSize:18,color:"rgba(255,255,255,.7)",lineHeight:1.6,marginBottom:24,maxWidth:460}}>
                 PaintIQ delivers smoking-hot leads, ready to book — so you spend less time chasing customers and more time painting. Book a demo and see how.
